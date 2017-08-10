@@ -27,6 +27,8 @@ RUN apk add --no-cache \
       wget && \
     rm -rf /var/cache/apk/* && rm -rf /tmp/*
 
+RUN apk add --no-cache --virtual .phpize-deps $PHPIZE_DEPS
+
 # 安装扩展
 RUN docker-php-ext-install gd zip mcrypt mbstring pdo_mysql opcache pcntl
 
