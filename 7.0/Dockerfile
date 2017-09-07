@@ -30,7 +30,7 @@ RUN apk add --no-cache \
 RUN apk add --no-cache --virtual .phpize-deps $PHPIZE_DEPS
 
 # 安装扩展
-RUN docker-php-ext-install gd zip mcrypt mbstring pdo_mysql opcache pcntl
+RUN docker-php-ext-install gd zip mcrypt mbstring pdo_mysql opcache pcntl iconv
 
 # redis
 RUN pecl install redis && docker-php-ext-enable redis 
