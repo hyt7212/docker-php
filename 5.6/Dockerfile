@@ -1,31 +1,67 @@
-FROM php:5.6-fpm-alpine
+FROM php:5.6-fpm
 
-RUN apk add --no-cache \
-      bash ca-certificates tzdata \
-      freetype \
-      libmcrypt \
-      libjpeg-turbo \
-      libpng \
-      openssl \
-      hiredis \
-      hiredis-dev \
-      libmcrypt-dev \
-      freetype-dev \
-      openssl-dev \
-      libjpeg-turbo-dev \
-      libpng-dev \
-      linux-headers \
-      musl \
-      gcc \
-      libtool && \
-    cp -r -f /usr/share/zoneinfo/Hongkong /etc/localtime && \
-    apk add --update \
-      tar \
-      gzip \
-      wget && \
-    apk del \
-      wget && \
-    rm -rf /var/cache/apk/* && rm -rf /tmp/*
+RUN apt-get update && apt-get install -y \
+        libicu-dev \
+        libpq-dev \
+        libbz2-dev \
+        php-pear \
+        mc \
+        vim \
+        wget \
+        libevent-dev \
+        librabbitmq-dev \
+    && docker-php-ext-install iconv \
+    && docker-php-ext-install zip \
+    && docker-php-ext-install bz2 \
+    && docker-php-ext-install mbstring \
+    && docker-php-ext-install intl \
+    && docker-php-ext-install pdo_mysql \
+    && docker-php-ext-install bcmath \
+    && docker-php-ext-install opcache \
+    && docker-php-ext-enable opcache
 
-# 安装扩展
-RUN docker-php-ext-install gd zip mcrypt mbstring pdo_mysql opcache pcntl iconv
+# Change TimeZone
+RUN echo "Set default timezone - Asia/Shanghai"
+RUN echo "Asia/Shanghai" > /etc/timezone
+
+# Install mcrypt
+RUN apt-get install -y libmcrypt-dev
+RUN docker-php-ext-install mcrypt
+
+# Install GD
+RUN apt-get install -y \
+        libfreetype6-dev \
+        libjpeg62-turbo-dev \
+        libpng12-dev \
+    && docker-php-ext-configure gd \
+          --enable-gd-native-ttf \
+          --with-freetype-dir=/usr/include/freetype2 \
+          --with-png-dir=/usr/include \
+          --with-jpeg-dir=/usr/include \
+    && docker-php-ext-install gd \
+    && docker-php-ext-enable gd
+
+## Install Xdebug
+# RUN curl -fsSL 'https://xdebug.org/files/xdebug-2.5.3.tgz' -o xdebug.tar.gz \
+#     && mkdir -p xdebug \
+#     && tar -xf xdebug.tar.gz -C xdebug --strip-components=1 \
+#     && rm xdebug.tar.gz \
+#     && ( \
+#         cd xdebug \
+#         && phpize \
+#         && ./configure --enable-xdebug \
+#         && make -j$(nproc) \
+#         && make install \
+#     ) \
+#     && rm -r xdebug \
+#     && docker-php-ext-enable xdebug
+
+# Install composer globally
+RUN echo "Install composer globally"
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin/ --filename=composer
+
+# Install redis
+RUN pecl install redis && docker-php-ext-enable redis
+
+RUN dpkg-reconfigure -f noninteractive tzdata
+RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
