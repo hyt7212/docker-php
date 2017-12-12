@@ -24,6 +24,7 @@ RUN apt-get update && apt-get install -y \
 # Change TimeZone
 RUN echo "Set default timezone - Asia/Shanghai"
 RUN echo "Asia/Shanghai" > /etc/timezone
+RUN dpkg-reconfigure -f noninteractive tzdata
 
 # Install mcrypt
 RUN apt-get install -y libmcrypt-dev
@@ -42,27 +43,12 @@ RUN apt-get install -y \
     && docker-php-ext-install gd \
     && docker-php-ext-enable gd
 
-## Install Xdebug
-# RUN curl -fsSL 'https://xdebug.org/files/xdebug-2.5.3.tgz' -o xdebug.tar.gz \
-#     && mkdir -p xdebug \
-#     && tar -xf xdebug.tar.gz -C xdebug --strip-components=1 \
-#     && rm xdebug.tar.gz \
-#     && ( \
-#         cd xdebug \
-#         && phpize \
-#         && ./configure --enable-xdebug \
-#         && make -j$(nproc) \
-#         && make install \
-#     ) \
-#     && rm -r xdebug \
-#     && docker-php-ext-enable xdebug
-
 # Install composer globally
-RUN echo "Install composer globally"
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin/ --filename=composer
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin/ --filename=composer \
+    && composer config -g repo.packagist composer https://packagist.phpcomposer.com
 
 # Install redis
 RUN pecl install redis && docker-php-ext-enable redis
 
-RUN dpkg-reconfigure -f noninteractive tzdata
+# clean
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*

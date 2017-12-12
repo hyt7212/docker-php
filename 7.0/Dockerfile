@@ -24,6 +24,7 @@ RUN apt-get update && apt-get install -y \
 # Change TimeZone
 RUN echo "Set default timezone - Asia/Shanghai"
 RUN echo "Asia/Shanghai" > /etc/timezone
+RUN dpkg-reconfigure -f noninteractive tzdata
 
 # Install mcrypt
 RUN apt-get install -y libmcrypt-dev
@@ -43,11 +44,11 @@ RUN apt-get install -y \
     && docker-php-ext-enable gd
 
 # Install composer globally
-RUN echo "Install composer globally"
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin/ --filename=composer
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin/ --filename=composer \
+    && composer config -g repo.packagist composer https://packagist.phpcomposer.com
 
 # Install redis
 RUN pecl install redis && docker-php-ext-enable redis
 
-RUN dpkg-reconfigure -f noninteractive tzdata
+# clean
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
