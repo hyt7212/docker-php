@@ -10,8 +10,8 @@ RUN apt-get update && apt-get install -y \
         wget \
         libevent-dev \
         librabbitmq-dev \
-        pytyon3 \
-        pytyon3-pip \
+        python3 \
+        python3-pip \
     && pip3 install xlrd \
     && docker-php-ext-install iconv \
     && docker-php-ext-install zip \
