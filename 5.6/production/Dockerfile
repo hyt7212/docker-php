@@ -50,5 +50,7 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin/ 
 # Install redis
 RUN pecl install redis && docker-php-ext-enable redis
 
+WORKDIR /data/www
+
 # clean
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
