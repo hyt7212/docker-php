@@ -42,21 +42,6 @@ RUN apt-get install -y \
     && docker-php-ext-install gd \
     && docker-php-ext-enable gd
 
-## Install Xdebug
-# RUN curl -fsSL 'https://xdebug.org/files/xdebug-2.5.3.tgz' -o xdebug.tar.gz \
-#     && mkdir -p xdebug \
-#     && tar -xf xdebug.tar.gz -C xdebug --strip-components=1 \
-#     && rm xdebug.tar.gz \
-#     && ( \
-#         cd xdebug \
-#         && phpize \
-#         && ./configure --enable-xdebug \
-#         && make -j$(nproc) \
-#         && make install \
-#     ) \
-#     && rm -r xdebug \
-#     && docker-php-ext-enable xdebug
-
 # Install composer globally
 RUN echo "Install composer globally"
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin/ --filename=composer
