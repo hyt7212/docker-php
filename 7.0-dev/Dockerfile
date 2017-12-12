@@ -70,5 +70,7 @@ RUN wget https://phar.phpunit.de/phpunit-6.2.phar \
     && chmod +x phpunit-6.2.phar \
     && mv phpunit-6.2.phar /usr/local/bin/phpunit
 
+WORKDIR /data/www
+
 # clean
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
