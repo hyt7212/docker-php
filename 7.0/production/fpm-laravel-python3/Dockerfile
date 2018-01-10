@@ -1,4 +1,4 @@
-FROM hyt7212/php:7.0-fpm
+FROM hyt7212/php:7.0-fpm-laravel
 
 RUN apt-get update && apt-get install -y \
         python3 \
