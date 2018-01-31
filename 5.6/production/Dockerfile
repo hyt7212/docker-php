@@ -1,34 +1,17 @@
 FROM php:5.6-fpm
 
-RUN apt-get update && apt-get install -y \
-        libicu-dev \
-        libpq-dev \
-        libbz2-dev \
-        php-pear \
-        mc \
-        vim \
-        wget \
-        libevent-dev \
-        librabbitmq-dev \
-    && docker-php-ext-install iconv \
-    && docker-php-ext-install zip \
-    && docker-php-ext-install bz2 \
-    && docker-php-ext-install mbstring \
-    && docker-php-ext-install intl \
-    && docker-php-ext-install pdo_mysql \
-    && docker-php-ext-install mysqli \
-    && docker-php-ext-install bcmath \
-    && docker-php-ext-install opcache \
+ENV REDIS_VERSION=3.1.6
+
+RUN apt-get update \
+    && apt-get install -y apt-utils libmcrypt-dev libicu-dev libpq-dev libbz2-dev libevent-dev librabbitmq-dev \
+        vim wget \
+    && docker-php-ext-install iconv zip bz2 mbstring intl pdo_mysql mysqli bcmath mcrypt opcache pcntl \
     && docker-php-ext-enable opcache
 
 # Change TimeZone
 RUN echo "Set default timezone - Asia/Shanghai"
 RUN echo "Asia/Shanghai" > /etc/timezone
 RUN dpkg-reconfigure -f noninteractive tzdata
-
-# Install mcrypt
-RUN apt-get install -y libmcrypt-dev
-RUN docker-php-ext-install mcrypt
 
 # Install GD
 RUN apt-get install -y \
@@ -48,9 +31,9 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin/ 
     && composer config -g repo.packagist composer https://packagist.phpcomposer.com
 
 # Install redis
-RUN pecl install redis && docker-php-ext-enable redis
-
-WORKDIR /data/www
+RUN pecl install redis-${REDIS_VERSION} && docker-php-ext-enable redis
 
 # clean
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+WORKDIR /data/www
