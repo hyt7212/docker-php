@@ -1,4 +1,4 @@
-FROM hyt7212/php:7.1-fpm-dev
+FROM ikerlin/php:7.1-fpm-dev
 
 RUN apt-get update && apt-get install -y \
         supervisor

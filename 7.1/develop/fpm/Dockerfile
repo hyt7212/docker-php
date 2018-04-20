@@ -1,4 +1,4 @@
-FROM hyt7212/php:7.1-fpm
+FROM ikerlin/php:7.1-fpm
 
 # Install Xdebug
 RUN curl -fsSL 'https://xdebug.org/files/xdebug-2.5.3.tgz' -o xdebug.tar.gz \
