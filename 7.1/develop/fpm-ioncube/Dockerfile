@@ -1,4 +1,4 @@
-FROM ikerlin/php:7.1-fpm-ionube
+FROM ikerlin/php:7.1-fpm-ioncube
 
 
 # Install Xdebug
