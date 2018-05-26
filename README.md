@@ -3,6 +3,7 @@
 # tags
 ```
 5.6-fpm
+5.6-fpm-soap-ioncube
 
 7.1-fpm
 7.1-fpm-dev
