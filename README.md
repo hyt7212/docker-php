@@ -15,4 +15,7 @@
 
 7.1-fpm-python3
 7.1-fpm-python3-dev
+
+7.1-fpm-ioncube
+7.1-fpm-ioncube-dev
 ```
