@@ -28,7 +28,7 @@ RUN apt-get install -y \
 
 # Install composer globally
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin/ --filename=composer \
-    && composer config -g repo.packagist composer https://packagist.phpcomposer.com
+    && composer config -g repo.packagist composer https://packagist.laravel-china.org
 
 # Install redis
 RUN pecl install redis-${REDIS_VERSION} && docker-php-ext-enable redis
