@@ -13,6 +13,7 @@
 
 7.1-fpm-supervisor
 7.1-fpm-supervisor-dev
+7.1-fpm-swoole
 
 7.1-fpm-python3
 7.1-fpm-python3-dev
